@@ -3,9 +3,18 @@
 <?language javascript?>
 
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <Pane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="mainPane"
-      fx:controller="com.tamagotchi.MainSceneController"
+      fx:controller="com.tamagotchi.controller.MainSceneController"
       stylesheets="@../css/styles.css">
+    <Button fx:id="createButton" text="Create" onAction="#buttonClicked"></Button>
+    <Button fx:id="deleteButton" text="Delete" translateX="100" onAction="#buttonClicked1"></Button>
+    <Button fx:id="moveLeftButton" text="Left" translateX="200" onAction="#buttonClicked2"></Button>
+    <Button fx:id="moveRightButton" text="Right" translateX="300" onAction="#buttonClicked3"></Button>
+    <Button fx:id="feedButton" text="Feed" translateX="400" onAction="#buttonClicked4"></Button>
+    <Button fx:id="deleteFoodButton" text="Del food" translateX="500" onAction="#buttonClicked5"></Button>
+    <Label fx:id="satietyLabel" text="" translateX="600"></Label>
 </Pane>

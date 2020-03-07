@@ -1,8 +1,8 @@
 package com.tamagotchi.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tamagotchi.model.view.IGameObjectView;
 import com.tamagotchi.model.view.PetView;
 
 import java.io.BufferedWriter;
@@ -24,8 +24,11 @@ public class Pet {
     private PetView image;
     private Consumer<PetView> onCleanView;
 
-    public Pet(Consumer<PetView> onCreateView, Consumer<PetView> onCleanView, Consumer<Integer> onSatietyChange) throws IOException {
-        this.image = new PetView();
+    public Pet(Consumer<PetView> onCreateView,
+               Consumer<PetView> onCleanView,
+               Consumer<Integer> onSatietyChange,
+               Consumer<IGameObjectView> onIntersect) throws IOException {
+        this.image = new PetView(onIntersect);
         this.onCleanView = onCleanView;
         this.onSatietyChange = onSatietyChange;
         setSatiety(100);

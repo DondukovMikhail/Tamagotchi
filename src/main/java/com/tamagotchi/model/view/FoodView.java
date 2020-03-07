@@ -1,16 +1,11 @@
 package com.tamagotchi.model.view;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import java.io.InputStream;
 import java.util.Random;
+import java.util.function.Consumer;
 
-public class FoodView extends ImageView {
-    public FoodView() {
-        super();
-        InputStream iconStream = getClass().getResourceAsStream("/images/food1.png");
-        Image image = new Image(iconStream);
-        this.setImage(image);
+public class FoodView extends AbstractGameObjectView {
+    public FoodView(Consumer<IGameObjectView> onIntersect) {
+        super(onIntersect, "/images/food1.png");
         this.setFitHeight(56);
         this.setFitWidth(56);
         this.setY(100);

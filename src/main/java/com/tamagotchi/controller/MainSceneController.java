@@ -3,6 +3,7 @@ package com.tamagotchi.controller;
 import com.tamagotchi.model.Food;
 import com.tamagotchi.service.FoodLifecycleService;
 import com.tamagotchi.service.PetLifecycleService;
+import com.tamagotchi.service.PhysicsService;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ public class MainSceneController {
 
     private PetLifecycleService petLifecycleService;
     private FoodLifecycleService foodLifecycleService;
+    private PhysicsService physicsService;
 
     @FXML
     private Label satietyLabel;
@@ -30,12 +32,15 @@ public class MainSceneController {
         previousTime = System.currentTimeMillis();
         petLifecycleService = new PetLifecycleService();
         foodLifecycleService = new FoodLifecycleService();
+        physicsService = new PhysicsService();
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 long systemNow = System.currentTimeMillis();
+                long delta = systemNow - previousTime;
                 try {
-                    petLifecycleService.update(systemNow - previousTime);
+                    petLifecycleService.update(delta);
+                    physicsService.process(delta);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -47,8 +52,14 @@ public class MainSceneController {
     @FXML
     private void buttonClicked() throws IOException {
         petLifecycleService.createPet(
-                it -> mainPane.getChildren().add(it),
-                it -> mainPane.getChildren().remove(it),
+                it -> {
+                    mainPane.getChildren().add(it);
+                    physicsService.registerView(it);
+                },
+                it -> {
+                    mainPane.getChildren().remove(it);
+                    physicsService.removeView(it);
+                },
                 it -> satietyLabel.setText(it.toString())
         );
         timer.start();
@@ -73,8 +84,14 @@ public class MainSceneController {
     @FXML
     private void buttonClicked4() {
         foodLifecycleService.createFood(
-                it -> mainPane.getChildren().add(it),
-                it -> mainPane.getChildren().remove(it)
+                it -> {
+                    mainPane.getChildren().add(it);
+                    physicsService.registerView(it);
+                },
+                it -> {
+                    mainPane.getChildren().remove(it);
+                    physicsService.removeView(it);
+                }
         );
     }
 

@@ -1,16 +1,10 @@
 package com.tamagotchi.model.view;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import java.util.function.Consumer;
 
-import java.io.InputStream;
-
-public class PetView extends ImageView {
-    public PetView() {
-        super();
-        InputStream iconStream = getClass().getResourceAsStream("/images/pet1.png");
-        Image image = new Image(iconStream);
-        this.setImage(image);
+public class PetView extends AbstractGameObjectView {
+    public PetView(Consumer<IGameObjectView> onIntersect) {
+        super(onIntersect, "/images/pet1.png");
         this.setFitHeight(240);
         this.setFitWidth(240);
         this.setX(100);

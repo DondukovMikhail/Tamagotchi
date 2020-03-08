@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?language javascript?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<Pane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="petChoosePane"
+      fx:controller="com.tamagotchi.controller.PetChooseSceneController">
+    <VBox>
+        <Pane minWidth="640" minHeight="80">
+            <Label translateX="280" translateY="40" text="Choose pet.">
+                <font>
+                    <Font name="Arial" size="18.0"/>
+                </font>
+            </Label>
+        </Pane>
+        <HBox minWidth="640" minHeight="400">
+            <VBox minWidth="213">
+                <ImageView fitWidth="120" fitHeight="120" translateX="50" translateY="70">
+                    <image>
+                        <Image url="@/images/pet1.png"/>
+                    </image>
+                </ImageView>
+                <Button fx:id="pet1Button" translateX="90" translateY="85" text="Pet 1" onAction="#nextScene"/>
+            </VBox>
+            <VBox minWidth="213">
+                <ImageView fitWidth="120" fitHeight="120" translateX="50" translateY="70">
+                    <image>
+                        <Image url="@/images/pet2.png"/>
+                    </image>
+                </ImageView>
+                <Button fx:id="pet2Button" translateX="90" translateY="85" text="Pet 2" onAction="#nextScene"/>
+            </VBox>
+            <VBox minWidth="214">
+                <ImageView fitWidth="120" fitHeight="120" translateX="50" translateY="70">
+                    <image>
+                        <Image url="@/images/pet3.png"/>
+                    </image>
+                </ImageView>
+                <Button fx:id="pet3Button" translateX="90" translateY="85" text="Pet 3" onAction="#nextScene"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</Pane>

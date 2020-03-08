@@ -1,28 +1,29 @@
 package com.tamagotchi;
 
-import com.tamagotchi.controller.MainSceneController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class App extends Application {
+    private Parent root;
+    private Stage currentStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/fxml/mainScene.fxml"));
-        //MainSceneController controller = loader.getController();
-        Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/petChooseScene.fxml"));
+        root = loader.load();
 
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setMinWidth(640);
-        primaryStage.setMinHeight(480);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("Tamagotchi");
-        primaryStage.show();
-        primaryStage.setOnCloseRequest(we -> ((MainSceneController) loader.getController()).stop());
+        currentStage = primaryStage;
+        currentStage.setScene(new Scene(root));
+        currentStage.setMinWidth(640);
+        currentStage.setMinHeight(480);
+        currentStage.setResizable(false);
+        currentStage.setTitle("Tamagotchi");
+        currentStage.show();
     }
 
     public static void main(String[] args) {

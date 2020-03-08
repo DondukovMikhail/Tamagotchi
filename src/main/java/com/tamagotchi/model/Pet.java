@@ -53,6 +53,7 @@ public class Pet {
         Pet pet = new Pet(this.satiety, this.scale, this.growTime, this.timeGotHungry, this.timeDied, image,
                 this.onSatietyChange, this.onCleanView);
         onCreateView.accept(image);
+        pet.setScale(this.scale);
         return pet;
     }
 
@@ -69,14 +70,14 @@ public class Pet {
     public void setScale(double scale) {
         if (scale >= 1 && scale <= maxScale)
             this.scale = scale;
-        if (image != null && image.getScaleX() != this.scale) {
-            image.setScaleX(scale);
-            image.setScaleY(scale);
+        if (this.image != null) {
+            this.image.setScaleX(scale);
+            this.image.setScaleY(scale);
         }
     }
 
     public void movePet(int value) {
-        image.setX(image.getX() + value);
+        this.image.setX(this.image.getX() + value);
     }
 
     public boolean growUp() {

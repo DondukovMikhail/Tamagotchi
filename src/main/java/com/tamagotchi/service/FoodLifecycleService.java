@@ -1,7 +1,6 @@
 package com.tamagotchi.service;
 
 import com.tamagotchi.model.Food;
-import com.tamagotchi.model.Pet;
 import com.tamagotchi.model.view.FoodView;
 import com.tamagotchi.model.view.IGameObjectView;
 import com.tamagotchi.model.view.PetView;
@@ -20,7 +19,7 @@ public class FoodLifecycleService implements IGameService {
         }
     }
 
-    public void deleteFood() {
+    private void deleteFood() {
         if (food != null) {
             food.clean();
             food = null;
@@ -32,5 +31,10 @@ public class FoodLifecycleService implements IGameService {
         if (other instanceof PetView) {
             deleteFood();
         }
+    }
+
+    @Override
+    public void stop() {
+        deleteFood();
     }
 }

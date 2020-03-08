@@ -1,6 +1,5 @@
 package com.tamagotchi.controller;
 
-import com.tamagotchi.model.Food;
 import com.tamagotchi.service.FoodLifecycleService;
 import com.tamagotchi.service.PetLifecycleService;
 import com.tamagotchi.service.PhysicsService;
@@ -27,7 +26,6 @@ public class MainSceneController {
     @FXML
     private Pane mainPane;
 
-
     public MainSceneController() {
         previousTime = System.currentTimeMillis();
         petLifecycleService = new PetLifecycleService();
@@ -38,19 +36,21 @@ public class MainSceneController {
             public void handle(long now) {
                 long systemNow = System.currentTimeMillis();
                 long delta = systemNow - previousTime;
-                try {
-                    petLifecycleService.update(delta);
-                    physicsService.process(delta);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                petLifecycleService.update(delta);
+                physicsService.process(delta);
                 previousTime = systemNow;
             }
         };
     }
 
+    public void stop() {
+        timer.stop();
+        petLifecycleService.stop();
+        foodLifecycleService.stop();
+    }
+
     @FXML
-    private void buttonClicked() throws IOException {
+    private void buttonClicked() {
         petLifecycleService.createPet(
                 it -> {
                     mainPane.getChildren().add(it);
@@ -66,9 +66,8 @@ public class MainSceneController {
     }
 
     @FXML
-    private void buttonClicked1() throws IOException {
-        timer.stop();
-        petLifecycleService.deletePet();
+    private void buttonClicked1() {
+
     }
 
     @FXML
@@ -97,6 +96,5 @@ public class MainSceneController {
 
     @FXML
     private void buttonClicked5() {
-        foodLifecycleService.deleteFood();
     }
 }

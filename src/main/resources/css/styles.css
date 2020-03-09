@@ -1,5 +1,9 @@
-#mainPane{
+#mainPane {
     -fx-background-image: url("../images/back.png");
     -fx-background-repeat: stretch;
     -fx-background-position: center center;
+}
+
+.info-label {
+    -fx-background-color: white;
 }

@@ -29,7 +29,7 @@
                         <Image url="@/images/pet1.png"/>
                     </image>
                 </ImageView>
-                <Button fx:id="pet1Button" translateX="90" translateY="85" text="Pet 1" onAction="#nextScene"/>
+                <Button fx:id="pet1Button" translateX="90" translateY="85" text="Pet 1" onAction="#pet1ButtonClicked"/>
             </VBox>
             <VBox minWidth="213">
                 <ImageView fitWidth="120" fitHeight="120" translateX="50" translateY="70">
@@ -37,7 +37,7 @@
                         <Image url="@/images/pet2.png"/>
                     </image>
                 </ImageView>
-                <Button fx:id="pet2Button" translateX="90" translateY="85" text="Pet 2" onAction="#nextScene"/>
+                <Button fx:id="pet2Button" translateX="90" translateY="85" text="Pet 2" onAction="#pet2ButtonClicked"/>
             </VBox>
             <VBox minWidth="214">
                 <ImageView fitWidth="120" fitHeight="120" translateX="50" translateY="70">
@@ -45,7 +45,7 @@
                         <Image url="@/images/pet3.png"/>
                     </image>
                 </ImageView>
-                <Button fx:id="pet3Button" translateX="90" translateY="85" text="Pet 3" onAction="#nextScene"/>
+                <Button fx:id="pet3Button" translateX="90" translateY="85" text="Pet 3" onAction="#pet3ButtonClicked"/>
             </VBox>
         </HBox>
     </VBox>

@@ -1,12 +1,13 @@
 package com.tamagotchi;
 
+import com.tamagotchi.controller.MainSceneController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.File;
 
 public class App extends Application {
     private Parent root;
@@ -14,7 +15,17 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/petChooseScene.fxml"));
+        File file = new File("game.json");
+        boolean isFirstLaunch = false;
+        if (!file.exists()) {
+            isFirstLaunch = true;
+        }
+
+        FXMLLoader loader;
+        if (isFirstLaunch)
+            loader = new FXMLLoader(getClass().getResource("/fxml/petChooseScene.fxml"));
+        else
+            loader = new FXMLLoader(getClass().getResource("/fxml/mainScene.fxml"));
         root = loader.load();
 
         currentStage = primaryStage;
@@ -23,7 +34,14 @@ public class App extends Application {
         currentStage.setMinHeight(480);
         currentStage.setResizable(false);
         currentStage.setTitle("Tamagotchi");
-        currentStage.show();
+        if (isFirstLaunch)
+            currentStage.show();
+        else {
+            MainSceneController mainSceneController = loader.getController();
+            currentStage.setOnCloseRequest(we -> mainSceneController.stop());
+            currentStage.show();
+            mainSceneController.initPet(0);
+        }
     }
 
     public static void main(String[] args) {

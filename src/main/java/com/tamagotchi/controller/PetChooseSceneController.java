@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class PetChooseSceneController {
 
+    private MainSceneController mainSceneController;
+
     @FXML
     private Pane petChoosePane;
 
@@ -24,7 +26,26 @@ public class PetChooseSceneController {
         Parent root = loader.load();
         Scene scene = new Scene(root, 640, 480);
         stage.setScene(scene);
+        mainSceneController = loader.getController();
+        stage.setOnCloseRequest(we -> mainSceneController.stop());
         stage.show();
-        stage.setOnCloseRequest(we -> ((MainSceneController) loader.getController()).stop());
+    }
+
+    @FXML
+    private void pet1ButtonClicked() throws IOException {
+        nextScene();
+        mainSceneController.initPet(1);
+    }
+
+    @FXML
+    private void pet2ButtonClicked() throws IOException {
+        nextScene();
+        mainSceneController.initPet(2);
+    }
+
+    @FXML
+    private void pet3ButtonClicked() throws IOException {
+        nextScene();
+        mainSceneController.initPet(3);
     }
 }

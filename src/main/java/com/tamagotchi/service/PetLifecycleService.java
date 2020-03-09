@@ -14,27 +14,33 @@ import java.util.function.Consumer;
 
 public class PetLifecycleService implements IGameService {
     private Pet pet;
-    private double hungerTime;
-    private double growTime;
+    private double hungerTimer;
+    private double growTimer;
+    private int chosenType = 1;
 
     private ObjectMapper objectMapper;
     private FileSystemDAO fileSystemDAO;
 
-    public PetLifecycleService() {
-        hungerTime = 0;
+    public Consumer<Long> onPetDied;
+    public Consumer<Integer> onChosenTypeChanged;
+
+    public PetLifecycleService(Consumer<Integer> onChosenTypeChanged) {
+        hungerTimer = 0;
         objectMapper = new ObjectMapper();
         fileSystemDAO = FileSystemDAO.getInstance();
+        this.onChosenTypeChanged = onChosenTypeChanged;
     }
 
     public void createPet(Consumer<PetView> onCreateView, Consumer<PetView> onCleanView,
-                          Consumer<Integer> onSatietyChange) {
+                          Consumer<Integer> onSatietyChange, Consumer<Long> onTimeGotHungryChange) {
         if (pet == null) {
             try {
-                pet = deserializePet(onCreateView, onCleanView, onSatietyChange);
+                pet = deserializePet(onCreateView, onCleanView, onSatietyChange, onTimeGotHungryChange);
+                setChosenType(pet.getImageType());
             } catch (GameFileNotFoundException e) {
-                pet = new Pet(onCreateView, onCleanView, onSatietyChange, this::processIntersect);
+                pet = new Pet(chosenType, onCreateView, onCleanView, onSatietyChange, onTimeGotHungryChange, this::processIntersect);
             }
-            growTime = pet.getGrowTime();
+            growTimer = pet.getGrowTime();
         }
     }
 
@@ -55,20 +61,20 @@ public class PetLifecycleService implements IGameService {
         try {
             fileSystemDAO.write("pet.json", jsonStr);
         } catch (IOException e) {
-            // Handle e
+            throw new RuntimeException(e);
         }
     }
 
     private Pet deserializePet(Consumer<PetView> onCreateView, Consumer<PetView> onCleanView,
-                               Consumer<Integer> onSatietyChange) throws GameFileNotFoundException {
+                               Consumer<Integer> onSatietyChange, Consumer<Long> onTimeGotHungryChange) throws GameFileNotFoundException {
         try {
             Pet pet = objectMapper.readValue(fileSystemDAO.read("pet.json"), Pet.class);
             return pet
                     .withOnCleanView(onCleanView)
                     .withOnSatietyChange(onSatietyChange)
+                    .withOnTimeGotHungryChange(onTimeGotHungryChange)
                     .withImage(onCreateView, this::processIntersect);
         } catch (IOException e) {
-            // Handle e
             throw new RuntimeException(e);
         }
     }
@@ -76,7 +82,8 @@ public class PetLifecycleService implements IGameService {
     @Override
     public void processIntersect(IGameObjectView other) {
         if (other instanceof FoodView) {
-            pet.setSatiety(pet.getSatiety() + 10);
+            pet.setSatiety(pet.getSatiety() + Pet.foodSatietyDelta);
+            pet.setTimeGotHungry(0);
         }
     }
 
@@ -86,36 +93,46 @@ public class PetLifecycleService implements IGameService {
     }
 
     public void movePet(int value) {
-        pet.movePet(value);
+        if (pet == null || pet.getImage() == null)
+            return;
+
+        if ((value < 0 && pet.getImage().getX() - value > 0) || (value > 0 && pet.getImage().getX() + pet.getImage().getFitWidth() + value < 680))
+            pet.movePet(value);
     }
 
     private void growPet() {
-        if (pet.growUp()) growTime = 0;
+        if (pet.growUp()) growTimer = 0;
     }
 
     public void update(long delta) {
         if (pet == null)
             return;
 
-        hungerTime += delta;
-        growTime += delta;
-        if (hungerTime > 250) {
+        hungerTimer += delta;
+        if (pet.getSatiety() > 0)
+            growTimer += delta;
+        long timeNow = System.currentTimeMillis();
+
+        if (hungerTimer > Pet.satietyChangeTime) {
             if (pet.getSatiety() > 0) {
                 pet.setSatiety(pet.getSatiety() - 1);
-                if (growTime > 1000) {
-                    growPet();
-                }
-            } else {
-                long timeNow = System.currentTimeMillis();
-                growTime = 0;
-                if (pet.getTimeGotHungry() == 0) {
+                if (growTimer > Pet.growthTime) growPet();
+                if (pet.getSatiety() == 0 && pet.getTimeGotHungry() == 0) {
                     pet.setTimeGotHungry(timeNow);
-                } else if (timeNow - pet.getTimeGotHungry() > 2000) {
-                    pet.setTimeDied(timeNow);
-                    deletePet();
+                    growTimer = 0;
                 }
+            } else if (pet.getTimeGotHungry() != 0 && timeNow - pet.getTimeGotHungry() > Pet.badMoodTimeToDeath) {
+                onPetDied.accept(timeNow);
+                deletePet();
             }
-            hungerTime = 0;
+
+            hungerTimer = 0;
         }
+    }
+
+    public void setChosenType(int chosenType) {
+        this.chosenType = chosenType;
+        if (onChosenTypeChanged != null)
+            onChosenTypeChanged.accept(this.chosenType);
     }
 }

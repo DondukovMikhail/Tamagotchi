@@ -4,10 +4,13 @@ import com.tamagotchi.model.Food;
 import com.tamagotchi.model.view.FoodView;
 import com.tamagotchi.model.view.IGameObjectView;
 import com.tamagotchi.model.view.PetView;
+import lombok.Setter;
 
 import java.util.function.Consumer;
 
 public class FoodLifecycleService implements IGameService {
+    @Setter
+    private int chosenType = 1;
     private Food food;
 
     public FoodLifecycleService() {
@@ -15,7 +18,7 @@ public class FoodLifecycleService implements IGameService {
 
     public void createFood(Consumer<FoodView> onCreateView, Consumer<FoodView> onCleanView) {
         if (food == null) {
-            food = new Food(onCreateView, onCleanView, this::processIntersect);
+            food = new Food(chosenType, onCreateView, onCleanView, this::processIntersect);
         }
     }
 

@@ -9,8 +9,8 @@ public class Food {
     private FoodView image;
     private Consumer<FoodView> onCleanView;
 
-    public Food(Consumer<FoodView> onCreateView, Consumer<FoodView> onCleanView, Consumer<IGameObjectView> onIntersect) {
-        this.image = new FoodView(onIntersect);
+    public Food(int imageType, Consumer<FoodView> onCreateView, Consumer<FoodView> onCleanView, Consumer<IGameObjectView> onIntersect) {
+        this.image = new FoodView(imageType, onIntersect);
         this.onCleanView = onCleanView;
         onCreateView.accept(image);
     }

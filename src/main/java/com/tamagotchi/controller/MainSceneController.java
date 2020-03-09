@@ -61,7 +61,7 @@ public class MainSceneController {
                 if (gameObjectLifecycleService.petIsDead()) {
                     if (petIsDeadLabel.getOpacity() == 0)
                         changeLabelsOpacity();
-                    int minutesLeftToNewPet = Math.max((int)(3 - (systemNow - gameObjectLifecycleService.getTimePetDied()) / 6000), 0);
+                    int minutesLeftToNewPet = Math.max((int)(15 - (systemNow - gameObjectLifecycleService.getTimePetDied()) / 60000), 0);
                     if (minutesLeftToNewPet > 0)
                         petIsDeadLabel.setText("Pet is dead.\nYou can create new in " + minutesLeftToNewPet + "min.");
                     else {
